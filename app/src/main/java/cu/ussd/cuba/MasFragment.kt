@@ -17,7 +17,7 @@ class MasFragment : Fragment() {
     private lateinit var adapter: UssdAdapter
     private val vm: AppViewModel by activityViewModels()
     private var query = ""
-    private var sub = "Transfermóvil"
+    private var sub = "Atención"
     private var wifiBound = false
 
     override fun onCreateView(i: LayoutInflater, c: ViewGroup?, s: Bundle?): View {
@@ -35,7 +35,6 @@ class MasFragment : Fragment() {
         b.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         b.recyclerView.adapter = adapter
         b.recyclerView.itemAnimator = null
-        b.chipTm.setOnClickListener { sub = "Transfermóvil"; sync(); apply() }
         b.chipAtencion.setOnClickListener { sub = "Atención"; sync(); apply() }
         b.chipEmergencias.setOnClickListener { sub = "Emergencias"; sync(); apply() }
         b.chipDispositivo.setOnClickListener { sub = "Dispositivo"; sync(); apply() }
@@ -47,7 +46,6 @@ class MasFragment : Fragment() {
     }
 
     private fun sync() {
-        b.chipTm.isChecked = sub == "Transfermóvil"
         b.chipAtencion.isChecked = sub == "Atención"
         b.chipEmergencias.isChecked = sub == "Emergencias"
         b.chipDispositivo.isChecked = sub == "Dispositivo"
