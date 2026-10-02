@@ -36,7 +36,6 @@
                 android:textColor="?attr/colorOnSurfaceVariant" />
         </LinearLayout>
 
-        <!-- Panel Nauta: usuario + contraseña + Conectar / Desconectar -->
         <androidx.core.widget.NestedScrollView
             android:id="@+id/wifiPanel"
             android:layout_width="match_parent"
@@ -128,7 +127,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="1. Conéctate a WIFI_ETECSA o a tu red Nauta Hogar\n2. Escribe usuario y contraseña (cualquier cuenta Nauta)\n3. Pulsa Conectar — Desconectar al terminar para no gastar tiempo"
+                    android:text="1. Conéctate a WIFI_ETECSA o a tu red Nauta Hogar\n2. Escribe usuario y contraseña\n3. Pulsa Conectar — Desconectar al terminar"
                     android:textSize="12sp"
                     android:textColor="?attr/colorOnSurfaceVariant"
                     android:lineSpacingExtra="3dp" />
@@ -152,20 +151,12 @@
             app:chipSpacingHorizontal="6dp">
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chipTm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Transfermóvil"
-                android:checkable="true"
-                android:checked="true"
-                style="@style/Widget.Material3.Chip.Filter" />
-
-            <com.google.android.material.chip.Chip
                 android:id="@+id/chipAtencion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Atención"
                 android:checkable="true"
+                android:checked="true"
                 style="@style/Widget.Material3.Chip.Filter" />
 
             <com.google.android.material.chip.Chip
