@@ -3,7 +3,7 @@ package cu.ussd.cuba
 object CodesRepository {
 
     val allCodes: List<UssdCode> = listOf(
-        // === CONSULTAS (UtilEs + ETECSA oficial 2025) ===
+        // === CONSULTAS ===
         UssdCode("c1", "Saldo principal y recursos", "*222#",
             "Saldo CUP, VOZ, SMS, DATOS y vigencia de la línea", "Consultas"),
         UssdCode("c2", "Plan de DATOS", "*222*328#",
@@ -33,7 +33,7 @@ object CodesRepository {
         UssdCode("c14", "Estado ocultar número (CLIR)", "*#31#",
             "Consulta si tu número se oculta al marcar", "Consultas"),
 
-        // === PLANES (menú *133# estilo UtilEs/QvaCall) ===
+        // === PLANES ===
         UssdCode("p1", "Menú comprar planes", "*133#",
             "1-Datos  2-SMS  3-Voz  4-Plan Amigos  5-Combinados", "Planes"),
         UssdCode("p1d", "Comprar plan DATOS", "*133*1#",
@@ -70,7 +70,7 @@ object CodesRepository {
             needsParams = true, paramHints = listOf("Código de tarjeta")
         ),
 
-        // === LLAMADAS (UtilEs + QvaCall) ===
+        // === LLAMADAS ===
         UssdCode(
             "l1", "Cobro revertido (*99)", "*99{numero}",
             "El receptor paga la llamada — útil sin saldo", "Llamadas",
@@ -171,67 +171,12 @@ object CodesRepository {
         UssdCode("e2", "Ambulancias", "104", "Gratuito", "Emergencias"),
         UssdCode("e3", "Bomberos", "105", "Gratuito", "Emergencias"),
         UssdCode("e4", "Policía", "106", "Gratuito", "Emergencias"),
-        UssdCode("e5", "Salvamento marítimo", "107", "Gratuito", "Emergencias"),
-
-        // === TRANSFERMÓVIL (completo) ===
-        UssdCode("t1", "TM · Login BANDEC", "*444*40*02#",
-            "Autenticarse Banco de Crédito y Comercio", "Transfermóvil"),
-        UssdCode("t2", "TM · Login BANMET", "*444*40*03#",
-            "Autenticarse Banco Metropolitano", "Transfermóvil"),
-        UssdCode("t3", "TM · Login BPA", "*444*40*01#",
-            "Autenticarse Banco Popular de Ahorro", "Transfermóvil"),
-        UssdCode("t4", "TM · Cerrar sesión", "*444*70#",
-            "Desconectar sesión Transfermóvil", "Transfermóvil"),
-        UssdCode("t5", "TM · Saldo bancario", "*444*46#",
-            "Consultar saldo de la cuenta", "Transfermóvil"),
-        UssdCode("t6", "TM · Últimas operaciones", "*444*48#",
-            "Últimos movimientos", "Transfermóvil"),
-        UssdCode("t7", "TM · Transferencia", "*444*45#",
-            "Transferir entre cuentas", "Transfermóvil"),
-        UssdCode("t8", "TM · Pagar electricidad", "*444*41#",
-            "Pago de factura eléctrica", "Transfermóvil"),
-        UssdCode("t9", "TM · Pagar teléfono", "*444*42#",
-            "Pago de factura telefónica", "Transfermóvil"),
-        UssdCode("t10", "TM · Pagar ONAT", "*444*43#",
-            "Pago de impuestos", "Transfermóvil"),
-        UssdCode("t10b", "TM · Pagar multa", "*444*44#",
-            "Pago de multas", "Transfermóvil"),
-        UssdCode("t11", "TM · Recarga móvil", "*444*54#",
-            "Recargar Cubacel desde el banco", "Transfermóvil"),
-        UssdCode("t12", "TM · Recarga Nauta", "*444*59#",
-            "Recargar cuenta Nauta", "Transfermóvil"),
-        UssdCode("t13", "TM · Límites", "*444*62#",
-            "Consultar límites de operaciones", "Transfermóvil"),
-        UssdCode("t14", "TM · Cambiar PIN", "*444*69#",
-            "Cambiar PIN de Transfermóvil", "Transfermóvil"),
-        UssdCode("t15", "TM · Lista de servicios", "*444*71#",
-            "Ver servicios disponibles", "Transfermóvil"),
-        UssdCode("t16", "TM · Pagar gas", "*444*67#",
-            "Pago de gas", "Transfermóvil"),
-        UssdCode("t17", "TM · Todas las cuentas", "*444*58#",
-            "Consulta integrada de cuentas", "Transfermóvil"),
-        UssdCode("t18", "TM · Consultar servicios", "*444*47#",
-            "Servicios asociados a la cuenta", "Transfermóvil"),
-        UssdCode(
-            "t19", "TM · Registrar tarjeta BANDEC", "*444*49*02*{tarjeta}#",
-            "Asociar tarjeta BANDEC a Transfermóvil", "Transfermóvil",
-            needsParams = true, paramHints = listOf("Número de tarjeta")
-        ),
-        UssdCode(
-            "t20", "TM · Registrar tarjeta BPA", "*444*49*01*{tarjeta}#",
-            "Asociar tarjeta BPA a Transfermóvil", "Transfermóvil",
-            needsParams = true, paramHints = listOf("Número de tarjeta")
-        ),
-        UssdCode(
-            "t21", "TM · Registrar tarjeta BANMET", "*444*49*03*{tarjeta}#",
-            "Asociar tarjeta BANMET a Transfermóvil", "Transfermóvil",
-            needsParams = true, paramHints = listOf("Número de tarjeta")
-        )
+        UssdCode("e5", "Salvamento marítimo", "107", "Gratuito", "Emergencias")
     )
 
     val categories = listOf(
         "Todos", "Favoritos", "Recientes", "Consultas", "Planes", "Recargas",
-        "Llamadas", "Internacional", "Dispositivo", "Atención", "Emergencias", "Transfermóvil"
+        "Llamadas", "Internacional", "Dispositivo", "Atención", "Emergencias"
     )
 
     val shortcuts = listOf(
@@ -241,16 +186,15 @@ object CodesRepository {
         allCodes.first { it.id == "p3" }
     )
 
-    /** Accesos rápidos tipo QvaCall / UtilEs (panel principal) */
     val quickPanel = listOf(
-        allCodes.first { it.id == "c1" },  // Saldo
-        allCodes.first { it.id == "c2" },  // Datos
-        allCodes.first { it.id == "c3" },  // Bono
-        allCodes.first { it.id == "p3" },  // Transferir
-        allCodes.first { it.id == "r2" },  // Recargar
-        allCodes.first { it.id == "l1" },  // *99
-        allCodes.first { it.id == "p1" },  // Planes
-        allCodes.first { it.id == "c6" }   // Límite 360
+        allCodes.first { it.id == "c1" },
+        allCodes.first { it.id == "c2" },
+        allCodes.first { it.id == "c3" },
+        allCodes.first { it.id == "p3" },
+        allCodes.first { it.id == "r2" },
+        allCodes.first { it.id == "l1" },
+        allCodes.first { it.id == "p1" },
+        allCodes.first { it.id == "c6" }
     )
 
     private val synonyms = mapOf(
@@ -265,17 +209,11 @@ object CodesRepository {
         "recarga" to listOf("666", "662", "732"),
         "saldo" to listOf("222", "consulta"),
         "imei" to listOf("06", "dispositivo"),
-        "banco" to listOf("444", "transfermóvil", "tm", "bandec", "bpa", "banmet"),
         "emergencia" to listOf("103", "104", "105", "106", "107"),
         "anonima" to listOf("31", "ocultar", "anónima"),
         "99" to listOf("cobro", "revertido", "sin saldo"),
         "amigos" to listOf("264", "plan amigos"),
         "desvio" to listOf("21", "67", "61", "desvío", "desviar"),
-        "nauta" to listOf("59", "recarga nauta"),
-        "luz" to listOf("41", "electricidad"),
-        "gas" to listOf("67"),
-        "multa" to listOf("44"),
-        "onat" to listOf("43", "impuesto"),
         "todus" to listOf("133", "datos"),
         "adelanta" to listOf("234", "adelanto")
     )
