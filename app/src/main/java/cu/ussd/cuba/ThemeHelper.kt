@@ -16,14 +16,11 @@ object ThemeHelper {
         val containerLight: Int
     )
 
-    /**
-     * Estilos de interfaz (independientes de la paleta de color).
-     * Por defecto: filas modernas con chip de código, sin barra lateral.
-     */
     data class UiStyle(
         val id: String,
         val name: String,
         val description: String,
+        val layoutMode: String,
         val cornerRadiusDp: Float,
         val cardElevationDp: Float,
         val itemMarginVDp: Int,
@@ -32,10 +29,15 @@ object ThemeHelper {
         val codeSp: Float,
         val descSp: Float,
         val showAccentBar: Boolean,
+        val showAccentTop: Boolean,
         val showDescription: Boolean,
+        val showCodeChip: Boolean,
+        val codeAsPlain: Boolean,
         val strokeWidthDp: Float,
         val favButtonDp: Int,
-        val listPaddingHDp: Int
+        val listPaddingHDp: Int,
+        val codeSideWidthDp: Int,
+        val minItemHeightDp: Int
     )
 
     val palettes = listOf(
@@ -49,106 +51,58 @@ object ThemeHelper {
 
     val uiStyles = listOf(
         UiStyle(
-            id = "clasico",
-            name = "Clásico",
-            description = "Filas limpias con chip de código (recomendado)",
-            cornerRadiusDp = 14f,
-            cardElevationDp = 0f,
-            itemMarginVDp = 3,
-            itemPaddingDp = 12,
-            titleSp = 15f,
-            codeSp = 13f,
-            descSp = 12f,
-            showAccentBar = false,
-            showDescription = true,
-            strokeWidthDp = 1f,
-            favButtonDp = 44,
-            listPaddingHDp = 12
+            id = "clasico", name = "Clásico",
+            description = "Fila: título + descripción + chip de código · favorito a la derecha",
+            layoutMode = "ROW_CHIP", cornerRadiusDp = 14f, cardElevationDp = 0f,
+            itemMarginVDp = 4, itemPaddingDp = 12, titleSp = 15f, codeSp = 12f, descSp = 12f,
+            showAccentBar = false, showAccentTop = false, showDescription = true,
+            showCodeChip = true, codeAsPlain = false, strokeWidthDp = 1f,
+            favButtonDp = 44, listPaddingHDp = 12, codeSideWidthDp = 0, minItemHeightDp = 0
         ),
         UiStyle(
-            id = "minimalista",
-            name = "Minimalista",
-            description = "Sin descripción, sin borde, máximo espacio",
-            cornerRadiusDp = 8f,
-            cardElevationDp = 0f,
-            itemMarginVDp = 2,
-            itemPaddingDp = 10,
-            titleSp = 14f,
-            codeSp = 12f,
-            descSp = 11f,
-            showAccentBar = false,
-            showDescription = false,
-            strokeWidthDp = 0f,
-            favButtonDp = 36,
-            listPaddingHDp = 10
+            id = "minimalista", name = "Minimalista",
+            description = "Lista plana sin tarjetas: solo título y código a la derecha",
+            layoutMode = "MINIMAL", cornerRadiusDp = 0f, cardElevationDp = 0f,
+            itemMarginVDp = 0, itemPaddingDp = 14, titleSp = 15f, codeSp = 13f, descSp = 11f,
+            showAccentBar = false, showAccentTop = false, showDescription = false,
+            showCodeChip = false, codeAsPlain = true, strokeWidthDp = 0f,
+            favButtonDp = 36, listPaddingHDp = 16, codeSideWidthDp = 0, minItemHeightDp = 48
         ),
         UiStyle(
-            id = "profesional",
-            name = "Profesional",
-            description = "Borde sutil + barra de acento lateral",
-            cornerRadiusDp = 12f,
-            cardElevationDp = 0f,
-            itemMarginVDp = 4,
-            itemPaddingDp = 12,
-            titleSp = 15f,
-            codeSp = 13f,
-            descSp = 12f,
-            showAccentBar = true,
-            showDescription = true,
-            strokeWidthDp = 1f,
-            favButtonDp = 44,
-            listPaddingHDp = 12
+            id = "profesional", name = "Profesional",
+            description = "Código en columna izquierda + barra superior de acento",
+            layoutMode = "CODE_LEFT", cornerRadiusDp = 10f, cardElevationDp = 0f,
+            itemMarginVDp = 5, itemPaddingDp = 10, titleSp = 15f, codeSp = 11f, descSp = 12f,
+            showAccentBar = false, showAccentTop = true, showDescription = true,
+            showCodeChip = false, codeAsPlain = false, strokeWidthDp = 1f,
+            favButtonDp = 40, listPaddingHDp = 12, codeSideWidthDp = 88, minItemHeightDp = 64
         ),
         UiStyle(
-            id = "compacto",
-            name = "Compacto",
-            description = "Más códigos en pantalla, texto denso",
-            cornerRadiusDp = 8f,
-            cardElevationDp = 0f,
-            itemMarginVDp = 1,
-            itemPaddingDp = 8,
-            titleSp = 13f,
-            codeSp = 11f,
-            descSp = 10f,
-            showAccentBar = false,
-            showDescription = false,
-            strokeWidthDp = 0f,
-            favButtonDp = 32,
-            listPaddingHDp = 8
+            id = "compacto", name = "Compacto",
+            description = "Una sola línea densa: código · título · favorito",
+            layoutMode = "FLAT_LINE", cornerRadiusDp = 6f, cardElevationDp = 0f,
+            itemMarginVDp = 1, itemPaddingDp = 6, titleSp = 13f, codeSp = 11f, descSp = 10f,
+            showAccentBar = false, showAccentTop = false, showDescription = false,
+            showCodeChip = false, codeAsPlain = true, strokeWidthDp = 0f,
+            favButtonDp = 32, listPaddingHDp = 6, codeSideWidthDp = 0, minItemHeightDp = 40
         ),
         UiStyle(
-            id = "comodo",
-            name = "Cómodo",
-            description = "Texto grande y áreas táctiles amplias",
-            cornerRadiusDp = 18f,
-            cardElevationDp = 2f,
-            itemMarginVDp = 6,
-            itemPaddingDp = 16,
-            titleSp = 17f,
-            codeSp = 14f,
-            descSp = 14f,
-            showAccentBar = false,
-            showDescription = true,
-            strokeWidthDp = 1f,
-            favButtonDp = 52,
-            listPaddingHDp = 12
+            id = "comodo", name = "Cómodo",
+            description = "Tarjeta alta apilada: título grande, código enorme, áreas táctiles amplias",
+            layoutMode = "STACK", cornerRadiusDp = 20f, cardElevationDp = 3f,
+            itemMarginVDp = 10, itemPaddingDp = 18, titleSp = 18f, codeSp = 20f, descSp = 14f,
+            showAccentBar = false, showAccentTop = false, showDescription = true,
+            showCodeChip = true, codeAsPlain = false, strokeWidthDp = 0f,
+            favButtonDp = 56, listPaddingHDp = 14, codeSideWidthDp = 0, minItemHeightDp = 0
         ),
         UiStyle(
-            id = "tarjetas",
-            name = "Tarjetas",
-            description = "Tarjetas elevadas y muy redondeadas",
-            cornerRadiusDp = 22f,
-            cardElevationDp = 4f,
-            itemMarginVDp = 8,
-            itemPaddingDp = 16,
-            titleSp = 15f,
-            codeSp = 13f,
-            descSp = 13f,
-            showAccentBar = false,
-            showDescription = true,
-            strokeWidthDp = 0f,
-            favButtonDp = 48,
-            listPaddingHDp = 14
+            id = "tarjetas", name = "Tarjetas",
+            description = "Código como franja superior de color · título y detalle debajo",
+            layoutMode = "BANNER", cornerRadiusDp = 18f, cardElevationDp = 5f,
+            itemMarginVDp = 10, itemPaddingDp = 0, titleSp = 16f, codeSp = 14f, descSp = 13f,
+            showAccentBar = false, showAccentTop = false, showDescription = true,
+            showCodeChip = false, codeAsPlain = false, strokeWidthDp = 0f,
+            favButtonDp = 48, listPaddingHDp = 16, codeSideWidthDp = 0, minItemHeightDp = 0
         )
     )
 
