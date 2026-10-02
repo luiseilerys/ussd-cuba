@@ -54,7 +54,6 @@ object NautaClient {
         trustAllSsl()
     }
 
-    /** Normaliza usuario: acepta con o sin @nauta.com.cu / @nauta.co.cu */
     fun normalizeUser(raw: String): String {
         val u = raw.trim()
         if (u.isEmpty()) return u
@@ -62,10 +61,6 @@ object NautaClient {
         return "$u@nauta.com.cu"
     }
 
-    /**
-     * Inicia sesión Nauta en la red actual (WIFI_ETECSA o Nauta Hogar).
-     * Debe haber Wi‑Fi con portal cautivo alcanzable.
-     */
     fun login(usernameRaw: String, password: String): Result {
         val username = normalizeUser(usernameRaw)
         if (username.isBlank() || password.isBlank()) {
@@ -105,7 +100,6 @@ object NautaClient {
                         ?: extractParam(body, "ATTRIBUTE_UUID")
                         ?: extractUuid(post.url)
                     if (uuid.isNullOrBlank()) {
-                        // A veces el login simple sin CSRF también funciona
                         val simple = postForm(LOGIN, mapOf("username" to username, "password" to password), "")
                         val uuid2 = extractUuid(simple.body) ?: extractParam(simple.body, "ATTRIBUTE_UUID")
                         if (uuid2.isNullOrBlank()) {
@@ -146,7 +140,6 @@ object NautaClient {
             return Result(false, "No hay sesión activa guardada")
         }
         return try {
-            // Preferir GET como stickNAUTA
             val q = buildString {
                 append("?username=").append(enc(username))
                 append("&ATTRIBUTE_UUID=").append(enc(attributeUuid))
@@ -157,7 +150,6 @@ object NautaClient {
             if (getRes.body.contains("SUCCESS", ignoreCase = true) ||
                 getRes.code in 200..399
             ) {
-                // También intentar POST por compatibilidad
                 if (!getRes.body.contains("SUCCESS", ignoreCase = true)) {
                     val postRes = postForm(
                         LOGOUT,
@@ -248,10 +240,8 @@ object NautaClient {
 
     private fun parseAccountPage(html: String): AccountInfo? {
         val timePatterns = listOf(
-            Pattern.compile(
-                """(?i)(?:tiempo\\s*(?:disponible|restante)|available\\s*time)[^0-9]{0,40}([0-9]{1,3}:[0-9]{2}:[0-9]{2})"""
-            ),
-            Pattern.compile("""(?i)([0-9]{1,3}:[0-9]{2}:[0-9]{2})""")
+            Pattern.compile("(?i)(?:tiempo\\s*(?:disponible|restante)|available\\s*time)[^0-9]{0,40}([0-9]{1,3}:[0-9]{2}:[0-9]{2})"),
+            Pattern.compile("(?i)([0-9]{1,3}:[0-9]{2}:[0-9]{2})")
         )
         var timeStr: String? = null
         for (p in timePatterns) {
@@ -265,9 +255,7 @@ object NautaClient {
         val secs = parseTimeToSeconds(timeStr)
         if (secs < 0) return null
         var credit: String? = null
-        val creditPat = Pattern.compile(
-            """(?i)(?:saldo|credit|crédito)[^0-9.]{0,30}([0-9]+(?:[.,][0-9]+)?)"""
-        )
+        val creditPat = Pattern.compile("(?i)(?:saldo|credit|crédito)[^0-9.]{0,30}([0-9]+(?:[.,][0-9]+)?)")
         val cm = creditPat.matcher(html)
         if (cm.find()) credit = cm.group(1)
         return AccountInfo(timeStr, secs, credit, html.take(200))
@@ -299,8 +287,8 @@ object NautaClient {
     private fun extractUuid(text: String): String? {
         val patterns = listOf(
             Pattern.compile("ATTRIBUTE_UUID=([A-Za-z0-9]+)"),
-            Pattern.compile("""ATTRIBUTE_UUID\\s*=\\s*\"([A-Za-z0-9]+)\""""),
-            Pattern.compile("""var\\s+urlParam[^\"]*ATTRIBUTE_UUID=([A-Za-z0-9]+)""")
+            Pattern.compile("ATTRIBUTE_UUID\\s*=\\s*[\"']([A-Za-z0-9]+)[\"']"),
+            Pattern.compile("var\\s+urlParam[^\"']*ATTRIBUTE_UUID=([A-Za-z0-9]+)")
         )
         for (p in patterns) {
             val m = p.matcher(text)
@@ -315,15 +303,16 @@ object NautaClient {
     }
 
     private fun extractHidden(html: String, name: String): String? {
-        val p = Pattern.compile(
-            """(?i)<input[^>]*name=[\"']?$name[\"']?[^>]*value=[\"']([^\"']*)[\"']|<input[^>]*value=[\"']([^\"']*)[\"'][^>]*name=[\"']?$name[\"']?"""
-        )
-        val m = p.matcher(html)
-        return if (m.find()) m.group(1) ?: m.group(2) else null
+        val p1 = Pattern.compile("(?i)<input[^>]*name=[\"']?" + name + "[\"']?[^>]*value=[\"']([^\"']*)[\"']")
+        val m1 = p1.matcher(html)
+        if (m1.find()) return m1.group(1)
+        val p2 = Pattern.compile("(?i)<input[^>]*value=[\"']([^\"']*)[\"'][^>]*name=[\"']?" + name + "[\"']?")
+        val m2 = p2.matcher(html)
+        return if (m2.find()) m2.group(1) else null
     }
 
     private fun extractParam(text: String, name: String): String? {
-        val m = Pattern.compile("(?i)$name=([^&\"'\\s]+)").matcher(text)
+        val m = Pattern.compile("(?i)" + name + "=([^&\"'\\s]+)").matcher(text)
         return if (m.find()) m.group(1) else null
     }
 
