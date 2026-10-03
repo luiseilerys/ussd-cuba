@@ -7,14 +7,13 @@
     android:orientation="vertical"
     android:background="?attr/colorSurface">
 
-    <!-- Indicador del módulo actual -->
     <TextView
         android:id="@+id/tvModuleHint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="14dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="2dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="4dp"
         android:textSize="12sp"
         android:textColor="?attr/colorOnSurfaceVariant"
         android:visibility="gone" />
@@ -39,29 +38,46 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:gravity="center"
-            android:padding="32dp"
+            android:padding="40dp"
             android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🔎"
+                android:textSize="40sp"
+                android:layout_marginBottom="12dp" />
 
             <TextView
                 android:id="@+id/tvEmpty"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:textColor="?attr/colorOnSurface"
+                android:text="Sin códigos" />
+
+            <TextView
+                android:id="@+id/tvEmptyHint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:textSize="13sp"
                 android:textAlignment="center"
                 android:textColor="?attr/colorOnSurfaceVariant"
-                android:text="Sin códigos en este tipo" />
+                android:text="Prueba otra búsqueda o categoría" />
         </LinearLayout>
     </FrameLayout>
 
-    <!-- Barra inferior de TIPOS dentro del módulo -->
     <HorizontalScrollView
         android:id="@+id/subtypeScroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="none"
         android:background="?attr/colorSurfaceContainer"
-        android:paddingVertical="6dp"
-        android:paddingHorizontal="8dp"
+        android:paddingVertical="8dp"
+        android:paddingHorizontal="10dp"
         android:clipToPadding="false">
 
         <com.google.android.material.chip.ChipGroup
@@ -70,7 +86,7 @@
             android:layout_height="wrap_content"
             app:singleSelection="true"
             app:selectionRequired="true"
-            app:chipSpacingHorizontal="6dp" />
+            app:chipSpacingHorizontal="8dp" />
     </HorizontalScrollView>
 
 </LinearLayout>
