@@ -41,6 +41,14 @@ class MainActivity : AppCompatActivity() {
     private val pageTitles = listOf(
         "Inicio", "Consultas", "Planes", "Llamadas", "Más", "Ajustes"
     )
+    private val pageSubtitles = listOf(
+        "Favoritos y accesos", "Saldo, datos y recursos", "Comprar y transferir",
+        "Desvíos y privacidad", "Atención y WiFi", "Tema e interfaz"
+    )
+    private val searchHints = listOf(
+        "Buscar en Inicio…", "Buscar en Consultas…", "Buscar en Planes…",
+        "Buscar en Llamadas…", "Buscar en Más…", "Buscar…"
+    )
 
     private val railButtonIds = listOf(
         R.id.nav_home, R.id.nav_consultas, R.id.nav_planes,
@@ -107,14 +115,27 @@ class MainActivity : AppCompatActivity() {
 
     private fun selectRail(index: Int) {
         railButtonIds.forEachIndexed { i, id ->
-            binding.root.findViewById<MaterialButton>(id)?.isSelected = (i == index)
-            binding.root.findViewById<MaterialButton>(id)?.alpha = if (i == index) 1f else 0.55f
+            val btn = binding.root.findViewById<MaterialButton>(id) ?: return@forEachIndexed
+            val selected = i == index
+            btn.isSelected = selected
+            btn.alpha = 1f
+            if (selected) {
+                btn.setBackgroundResource(R.drawable.bg_rail_selected)
+            } else {
+                btn.background = null
+            }
         }
     }
 
     private fun applyModuleUi(index: Int) {
         binding.toolbar.title = pageTitles[index]
+        binding.toolbar.subtitle = pageSubtitles.getOrNull(index).orEmpty()
         binding.searchCard.isVisible = index != 5
+        if (index != 5) {
+            binding.etSearch.hint = searchHints.getOrElse(index) { "Buscar…" }
+        }
+        binding.viewPager.alpha = 0.92f
+        binding.viewPager.animate().alpha(1f).setDuration(160).start()
     }
 
     private fun restoreBackgroundFeatures() {
@@ -128,9 +149,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean = false
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean =
-        super.onOptionsItemSelected(item)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = super.onOptionsItemSelected(item)
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
@@ -147,13 +166,8 @@ class MainActivity : AppCompatActivity() {
         dialRaw(code)
     }
 
-    fun notifyRefresh() {
-        viewModel.notifyDataChanged()
-    }
-
-    fun notifyStyleChanged() {
-        viewModel.notifyStyleChanged()
-    }
+    fun notifyRefresh() { viewModel.notifyDataChanged() }
+    fun notifyStyleChanged() { viewModel.notifyStyleChanged() }
 
     fun handleCodeClick(code: UssdCode) {
         if (prefs.getCopyInsteadOfDial()) {
@@ -349,9 +363,7 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 
-    fun recreateWithTheme() {
-        recreate()
-    }
+    fun recreateWithTheme() { recreate() }
 
     private inner class PagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
         override fun getItemCount() = 6
