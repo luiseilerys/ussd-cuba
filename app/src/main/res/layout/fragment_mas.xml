@@ -27,13 +27,23 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:gravity="center"
+            android:padding="40dp"
             android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="📭"
+                android:textSize="40sp"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="Sin resultados"
-                android:textColor="?attr/colorOnSurfaceVariant" />
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnSurface" />
         </LinearLayout>
 
         <androidx.core.widget.NestedScrollView
@@ -53,26 +63,28 @@
                     android:layout_height="wrap_content"
                     android:text="Nauta · WiFi ETECSA / Hogar"
                     android:textStyle="bold"
-                    android:textSize="16sp"
-                    android:textColor="?attr/colorPrimary"
-                    android:layout_marginBottom="4dp" />
+                    android:textSize="17sp"
+                    android:textColor="?attr/colorOnSurface"
+                    android:layout_marginBottom="12dp" />
 
                 <TextView
                     android:id="@+id/tvWifiStatus"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Estado…"
-                    android:textSize="13sp"
-                    android:padding="12dp"
-                    android:background="?attr/colorSurfaceContainer"
-                    android:layout_marginBottom="16dp" />
+                    android:textSize="14sp"
+                    android:lineSpacingExtra="4dp"
+                    android:padding="16dp"
+                    android:background="@drawable/bg_status_idle"
+                    android:textColor="?attr/colorOnSurface"
+                    android:layout_marginBottom="18dp" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Usuario Nauta"
                     app:boxBackgroundMode="outline"
-                    android:layout_marginBottom="10dp">
+                    android:layout_marginBottom="12dp">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etNautaUser"
@@ -88,7 +100,7 @@
                     android:hint="Contraseña"
                     app:boxBackgroundMode="outline"
                     app:endIconMode="password_toggle"
-                    android:layout_marginBottom="16dp">
+                    android:layout_marginBottom="18dp">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etNautaPass"
@@ -126,11 +138,11 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="1. Conéctate a WIFI_ETECSA o a tu red Nauta Hogar\n2. Escribe usuario y contraseña\n3. Pulsa Conectar — Desconectar al terminar"
+                    android:layout_marginTop="18dp"
+                    android:text="1. Conéctate a WIFI_ETECSA o Nauta Hogar\n2. Escribe usuario y contraseña\n3. Conectar — Desconectar al terminar"
                     android:textSize="12sp"
                     android:textColor="?attr/colorOnSurfaceVariant"
-                    android:lineSpacingExtra="3dp" />
+                    android:lineSpacingExtra="4dp" />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </FrameLayout>
@@ -140,15 +152,15 @@
         android:layout_height="wrap_content"
         android:scrollbars="none"
         android:background="?attr/colorSurfaceContainer"
-        android:paddingVertical="6dp"
-        android:paddingHorizontal="8dp">
+        android:paddingVertical="8dp"
+        android:paddingHorizontal="10dp">
 
         <com.google.android.material.chip.ChipGroup
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:singleSelection="true"
             app:selectionRequired="true"
-            app:chipSpacingHorizontal="6dp">
+            app:chipSpacingHorizontal="8dp">
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipAtencion"
