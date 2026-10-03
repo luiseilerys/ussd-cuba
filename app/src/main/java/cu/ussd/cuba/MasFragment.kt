@@ -85,8 +85,12 @@ class MasFragment : Fragment() {
         if (_b == null) return
         val p = (requireActivity() as MainActivity).prefs
         val wifi = WifiHelper.statusText(requireContext())
-        val session = if (p.getNautaUuid().isNotBlank()) "Sesión activa" else "Sin sesión Nauta activa"
+        val active = p.getNautaUuid().isNotBlank()
+        val session = if (active) "● Sesión Nauta activa" else "○ Sin sesión Nauta"
         b.tvWifiStatus.text = "$wifi\n$session"
+        b.tvWifiStatus.setBackgroundResource(
+            if (active) R.drawable.bg_status_ok else R.drawable.bg_status_idle
+        )
     }
 
     private fun doConnect() {
@@ -121,7 +125,11 @@ class MasFragment : Fragment() {
                     }
                     act.prefs.setNautaLastSyncMs(System.currentTimeMillis())
                 }
-                b.tvWifiStatus.text = "${WifiHelper.statusText(requireContext())}\n${result.message}"
+                refreshWifiStatus()
+                if (!result.ok) {
+                    b.tvWifiStatus.text = "${WifiHelper.statusText(requireContext())}\n${result.message}"
+                    b.tvWifiStatus.setBackgroundResource(R.drawable.bg_status_idle)
+                }
                 Toast.makeText(requireContext(), result.message, Toast.LENGTH_LONG).show()
             }
         }.start()
@@ -149,7 +157,7 @@ class MasFragment : Fragment() {
                     p.setNautaWlanIp("")
                     p.setNautaRemainingSec(-1)
                 }
-                b.tvWifiStatus.text = "${WifiHelper.statusText(requireContext())}\n${result.message}"
+                refreshWifiStatus()
                 Toast.makeText(requireContext(), result.message, Toast.LENGTH_LONG).show()
             }
         }.start()

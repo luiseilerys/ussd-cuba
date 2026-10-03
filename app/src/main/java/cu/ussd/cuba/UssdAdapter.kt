@@ -32,9 +32,7 @@ class UssdAdapter(
 
     class ViewHolder(val binding: ItemUssdBinding) : RecyclerView.ViewHolder(binding.root)
 
-    fun forceRestyle() {
-        notifyDataSetChanged()
-    }
+    fun forceRestyle() { notifyDataSetChanged() }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemUssdBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -47,7 +45,6 @@ class UssdAdapter(
         val ctx = b.root.context
         val style = styleProvider()
         val density = ctx.resources.displayMetrics.density
-
         fun dp(v: Int) = (v * density).toInt()
         fun dpF(v: Float) = v * density
 
@@ -63,24 +60,18 @@ class UssdAdapter(
             if (ctx.theme.resolveAttribute(com.google.android.material.R.attr.colorOutlineVariant, tv, true)) {
                 card.strokeColor = tv.data
             }
-        } else {
-            card.strokeWidth = 0
-        }
+        } else card.strokeWidth = 0
 
-        val bgAttr = if (style.layoutMode == "MINIMAL")
-            com.google.android.material.R.attr.colorSurface
-        else
-            com.google.android.material.R.attr.colorSurfaceContainer
+        val flat = style.layoutMode == "MINIMAL" || style.layoutMode == "FLAT_LINE"
+        val bgAttr = if (flat) com.google.android.material.R.attr.colorSurface
+        else com.google.android.material.R.attr.colorSurfaceContainer
         val tvBg = TypedValue()
-        if (ctx.theme.resolveAttribute(bgAttr, tvBg, true)) {
-            card.setCardBackgroundColor(tvBg.data)
-        }
+        if (ctx.theme.resolveAttribute(bgAttr, tvBg, true)) card.setCardBackgroundColor(tvBg.data)
 
         val lp = card.layoutParams
         if (lp is ViewGroup.MarginLayoutParams) {
             val m = dp(style.itemMarginVDp)
-            lp.topMargin = m
-            lp.bottomMargin = m
+            lp.topMargin = m; lp.bottomMargin = m
             card.layoutParams = lp
         }
         card.minimumHeight = if (style.minItemHeightDp > 0) dp(style.minItemHeightDp) else 0
@@ -92,11 +83,14 @@ class UssdAdapter(
         b.tvCode.isVisible = false
         b.tvCodePlain.isVisible = false
         b.tvDescription.isVisible = false
+        b.rowDivider.isVisible = flat
 
         b.tvTitle.text = item.title
         b.tvTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, style.titleSp)
+        b.tvTitle.setTypeface(b.tvTitle.typeface, Typeface.BOLD)
         b.tvDescription.text = item.description
         b.tvDescription.setTextSize(TypedValue.COMPLEX_UNIT_SP, style.descSp)
+        b.tvDescription.alpha = 0.9f
         b.tvCode.text = codeText
         b.tvCode.setTextSize(TypedValue.COMPLEX_UNIT_SP, style.codeSp)
         b.tvCodeSide.text = codeText
@@ -107,18 +101,13 @@ class UssdAdapter(
         b.tvCodeBanner.setTextSize(TypedValue.COMPLEX_UNIT_SP, style.codeSp)
 
         val favSize = dp(style.favButtonDp)
-        b.btnFavorite.updateLayoutParams {
-            width = favSize
-            height = favSize
-        }
+        b.btnFavorite.updateLayoutParams { width = favSize; height = favSize }
         val fav = isFavorite(item.id)
-        b.btnFavorite.setImageResource(
-            if (fav) R.drawable.ic_star_filled else R.drawable.ic_star_outline
-        )
+        b.btnFavorite.setImageResource(if (fav) R.drawable.ic_star_filled else R.drawable.ic_star_outline)
         b.btnFavorite.clearColorFilter()
+        b.btnFavorite.imageTintList = null
 
         val pad = dp(style.itemPaddingDp)
-
         when (style.layoutMode) {
             "MINIMAL" -> {
                 b.bodyRow.orientation = LinearLayout.HORIZONTAL
@@ -185,10 +174,7 @@ class UssdAdapter(
         }
 
         b.root.setOnClickListener { onClick(item) }
-        b.root.setOnLongClickListener {
-            onLongClick(item)
-            true
-        }
+        b.root.setOnLongClickListener { onLongClick(item); true }
         b.btnFavorite.setOnClickListener { onFavoriteClick(item) }
     }
 }
